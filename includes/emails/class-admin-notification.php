@@ -7,6 +7,7 @@
 
 namespace PY\Otkaz\Emails;
 
+use PY\Otkaz\I18n;
 use PY\Otkaz\Settings;
 
 defined( 'ABSPATH' ) || exit;
@@ -103,16 +104,16 @@ class Admin_Notification extends Base {
 		if ( ! $submission || ! $order ) {
 			return false;
 		}
-		// Store emails always in the site language.
-		$switched = switch_to_locale( get_locale() );
-		$this->prepare( $submission, $order );
-
-		$sent = false;
-		if ( $this->is_enabled() && $this->get_recipient() ) {
-			$sent = (bool) $this->send( $this->get_recipient(), $this->get_subject(), $this->get_content(), $this->get_headers(), $this->get_attachments() );
-		}
-		if ( $switched ) {
-			restore_previous_locale();
+		// Store emails always in the site language (not the visitor's language on multilingual sites).
+		$state = I18n::switch_to_site_language();
+		$sent  = false;
+		try {
+			$this->prepare( $submission, $order );
+			if ( $this->is_enabled() && $this->get_recipient() ) {
+				$sent = (bool) $this->send( $this->get_recipient(), $this->get_subject(), $this->get_content(), $this->get_headers(), $this->get_attachments() );
+			}
+		} finally {
+			I18n::restore( $state );
 		}
 		return $sent;
 	}

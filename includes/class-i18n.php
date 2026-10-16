@@ -149,6 +149,25 @@ class I18n {
 	}
 
 	/**
+	 * Locale of the site's default language. Multilingual plugins filter get_locale()
+	 * to the visitor's language, but emails to the store must use the site language.
+	 *
+	 * @return string
+	 */
+	public static function site_locale() {
+		$locale = '';
+		if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
+			$locale = self::locale_for( (string) apply_filters( 'wpml_default_language', null ) ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- third-party hook.
+		} elseif ( function_exists( 'pll_default_language' ) ) {
+			$locale = (string) pll_default_language( 'locale' );
+		} elseif ( class_exists( 'TRP_Translate_Press' ) ) {
+			$trp    = get_option( 'trp_settings' );
+			$locale = is_array( $trp ) && ! empty( $trp['default-language'] ) ? (string) $trp['default-language'] : '';
+		}
+		return $locale ? $locale : get_locale();
+	}
+
+	/**
 	 * Switch WPML language + WP locale to the order language (fallback: site locale).
 	 *
 	 * @param \WC_Order $order    Order.
@@ -178,7 +197,28 @@ class I18n {
 	}
 
 	/**
-	 * Restore after switch_to_order_language().
+	 * Switch WPML language + WP locale to the site's default language (emails to the store).
+	 *
+	 * @return array State for restore().
+	 */
+	public static function switch_to_site_language() {
+		$state = array(
+			'wpml_prev' => '',
+			'switched'  => false,
+		);
+		if ( defined( 'ICL_SITEPRESS_VERSION' ) && has_action( 'wpml_switch_language' ) ) {
+			$default = (string) apply_filters( 'wpml_default_language', null ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- third-party hook.
+			if ( $default ) {
+				$state['wpml_prev'] = self::current_language();
+				do_action( 'wpml_switch_language', $default ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- third-party hook.
+			}
+		}
+		$state['switched'] = switch_to_locale( self::site_locale() );
+		return $state;
+	}
+
+	/**
+	 * Restore after switch_to_order_language() / switch_to_site_language().
 	 *
 	 * @param array $state State.
 	 */
