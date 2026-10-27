@@ -38,7 +38,7 @@ Since 2026, online shops in the EU must let consumers withdraw from a distance c
 * HPOS compatible, WPML / Polylang ready, accessible (keyboard, screen readers), works without JavaScript.
 * GDPR: personal data exporter, retention period with automatic deletion, privacy policy text suggestion.
 
-**Languages:** English and Bulgarian included.
+**Languages:** English. Translations, including Bulgarian, are delivered automatically through translate.wordpress.org.
 
 This plugin does not provide legal advice. Your terms and conditions and the information on the right of withdrawal remain your responsibility.
 
