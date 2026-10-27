@@ -44,7 +44,14 @@ if ( $otkazpro_error ) {
 	</div>
 
 	<?php if ( ! empty( $item['image'] ) ) : ?>
-		<div class="otkazpro-item__img" aria-hidden="true"><?php echo $item['image']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WC_Product::get_image() markup. ?></div>
+		<div class="otkazpro-item__img" aria-hidden="true"><?php
+			echo wp_kses(
+				$item['image'],
+				array(
+					'img' => array_fill_keys( array( 'src', 'srcset', 'sizes', 'width', 'height', 'class', 'alt', 'loading', 'decoding' ), true ),
+				)
+			);
+			?></div>
 	<?php endif; ?>
 
 	<div class="otkazpro-item__body">

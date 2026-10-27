@@ -1,10 +1,15 @@
 <?php
 // Usage: php build-l10n.php <strings.json> <bg.php> <languages_dir> <version>
+// The .pot ships in <languages_dir>; the bg_BG files go to bin/i18n/build/ (not shipped –
+// WordPress.org serves translations from translate.wordpress.org; import the .po there).
 list( , $json, $bgfile, $outdir, $version ) = $argv;
+$bgdir = __DIR__ . '/build';
 $strings = json_decode( file_get_contents( $json ), true );
-if ( ! is_dir( $outdir ) && ! mkdir( $outdir, 0777, true ) ) {
-	fwrite( STDERR, "Cannot create $outdir\n" );
-	exit( 1 );
+foreach ( array( $outdir, $bgdir ) as $dir ) {
+	if ( ! is_dir( $dir ) && ! mkdir( $dir, 0777, true ) ) {
+		fwrite( STDERR, "Cannot create $dir\n" );
+		exit( 1 );
+	}
 }
 $write = function ( $file, $data ) {
 	if ( false === file_put_contents( $file, $data ) ) {
@@ -114,7 +119,7 @@ $po = function ( $lang ) use ( $strings, $bg, $esc, $header ) {
 };
 
 $write( "$outdir/otkazpro.pot", $po( '' ) );
-$write( "$outdir/otkazpro-bg_BG.po", $po( 'bg_BG' ) );
+$write( "$bgdir/otkazpro-bg_BG.po", $po( 'bg_BG' ) );
 
 // .mo
 $entries = array( '' => $header( 'bg_BG' ) );
@@ -148,7 +153,7 @@ foreach ( $offs as $o ) {
 	$mo .= pack( 'ii', $o[2], $val_start + $o[3] );
 }
 $mo .= $ids . $strs;
-$write( "$outdir/otkazpro-bg_BG.mo", $mo );
+$write( "$bgdir/otkazpro-bg_BG.mo", $mo );
 
 // .l10n.php (WordPress 6.5+ performant translations).
 $messages = array();
@@ -170,6 +175,6 @@ $php  = "<?php\nreturn " . var_export(
 	),
 	true
 ) . ";\n";
-$write( "$outdir/otkazpro-bg_BG.l10n.php", $php );
+$write( "$bgdir/otkazpro-bg_BG.l10n.php", $php );
 
 echo count( $strings ) . " strings OK → pot, po, mo, l10n.php\n";

@@ -38,7 +38,7 @@ wc_get_template(
 	PY_OTKAZ_DIR . 'templates/'
 );
 
-echo "\n" . esc_html__( 'Open the order', 'otkazpro' ) . ': ' . esc_url_raw( $order->get_edit_order_url() ) . "\n";
+echo "\n" . esc_html__( 'Open the order', 'otkazpro' ) . ': ' . esc_url( $order->get_edit_order_url() ) . "\n";
 
 if ( 'sent' !== $submission->email_status ) {
 	echo "\n" . esc_html__( 'The confirmation email to the customer could not be sent. Use “Resend” in WooCommerce → Withdrawals.', 'otkazpro' ) . "\n";

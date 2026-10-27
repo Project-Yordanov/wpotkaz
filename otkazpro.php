@@ -89,15 +89,6 @@ add_action(
 	}
 );
 
-// Bundled translations (Bulgarian) until/unless a translate.wordpress.org language pack exists.
-add_action(
-	'init',
-	static function () {
-		load_plugin_textdomain( 'otkazpro', false, dirname( PY_OTKAZ_BASENAME ) . '/languages' ); // phpcs:ignore PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound -- ships bg_BG translations.
-	},
-	0
-);
-
 register_activation_hook( __FILE__, array( 'PY\\Otkaz\\Install', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'PY\\Otkaz\\Install', 'deactivate' ) );
 

@@ -118,7 +118,7 @@ class Emails {
 		if ( $sent_to_admin ) {
 			return;
 		}
-		echo self::link_block( $order, $email, (bool) $plain_text ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in link_block().
+		echo wp_kses_post( self::link_block( $order, $email, (bool) $plain_text ) );
 	}
 
 	/**
@@ -152,9 +152,10 @@ class Emails {
 			return $params;
 		}
 		if ( $plain ) {
+			// The message is already final here, so undo esc_url()'s &#038; as WooCommerce does for plain emails.
 			$params[2] = rtrim( $message ) . "
 
-" . trim( $block ) . "
+" . str_replace( '&#038;', '&', trim( $block ) ) . "
 ";
 			return $params;
 		}
@@ -190,7 +191,7 @@ class Emails {
 		if ( $plain ) {
 			return "
 " . esc_html( wp_strip_all_tags( $intro ) ) . "
-" . esc_html( $label ) . ': ' . esc_url_raw( $url ) . "
+" . esc_html( $label ) . ': ' . esc_url( $url ) . "
 
 ";
 		}

@@ -29,7 +29,7 @@ class Admin {
 		add_filter( 'plugin_row_meta', array( __CLASS__, 'row_meta' ), 10, 2 );
 		add_filter( 'admin_footer_text', array( __CLASS__, 'footer_credit' ), 20 );
 		add_action( 'admin_notices', array( __CLASS__, 'notices' ) );
-		add_action( 'admin_head', array( __CLASS__, 'admin_css' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_css' ) );
 
 		// Orders list column – HPOS and legacy.
 		add_filter( 'manage_woocommerce_page_wc-orders_columns', array( __CLASS__, 'orders_column' ), 20 );
@@ -394,10 +394,13 @@ class Admin {
 			echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'The email could not be sent. Check your SMTP settings and WooCommerce → Status → Logs (source “otkazpro”).', 'otkazpro' ) . '</p></div>';
 		}
 
-		// Cache self-check: critical everywhere, "cached" only on OtkazPro screens.
+		// Persistent warnings are limited to the OtkazPro screens (critical ones also to the Plugins screen).
+		$on_ours = self::is_own_screen();
+		if ( ! $on_ours && ! self::is_screen( 'plugins' ) ) {
+			return;
+		}
+
 		$cache_level = Cache_Check::level( Cache_Check::result() );
-		$cache_scr   = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-		$on_ours     = $cache_scr && ( 'woocommerce_page_' . self::PAGE === $cache_scr->id || 'woocommerce_page_wc-settings' === $cache_scr->id );
 		if ( 'cache_checked' !== $msg && current_user_can( self::CAP ) && ( 'critical' === $cache_level || ( 'recommended' === $cache_level && $on_ours ) ) ) {
 			printf(
 				'<div class="notice %1$s"><p><strong>%2$s</strong> %3$s</p><p><a class="button" href="%4$s">%5$s</a></p></div>',
@@ -425,6 +428,28 @@ class Admin {
 				esc_html__( 'Open settings', 'otkazpro' )
 			);
 		}
+	}
+
+	/**
+	 * Is the current admin screen one of the OtkazPro screens (register or its settings tab)?
+	 *
+	 * @return bool
+	 */
+	private static function is_own_screen() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
+		return self::is_screen( 'woocommerce_page_' . self::PAGE ) || ( self::is_screen( 'woocommerce_page_wc-settings' ) && Settings::TAB === $tab );
+	}
+
+	/**
+	 * Is the current admin screen the given one?
+	 *
+	 * @param string $id Screen ID.
+	 * @return bool
+	 */
+	private static function is_screen( $id ) {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		return $screen && $id === $screen->id;
 	}
 
 	/**
@@ -511,14 +536,7 @@ class Admin {
 	 * @return string
 	 */
 	public static function footer_credit( $text ) {
-		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-		if ( ! $screen ) {
-			return $text;
-		}
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$tab  = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
-		$ours = 'woocommerce_page_' . self::PAGE === $screen->id || ( 'woocommerce_page_wc-settings' === $screen->id && Settings::TAB === $tab );
-		if ( ! $ours ) {
+		if ( ! self::is_own_screen() ) {
 			return $text;
 		}
 		return sprintf(
@@ -534,17 +552,18 @@ class Admin {
 	 * Small admin CSS for badges.
 	 */
 	public static function admin_css() {
-		?>
-		<style>
-			.otkazpro-badge{display:inline-block;padding:2px 8px;border-radius:10px;background:#f0f0f1;color:#50575e;font-size:12px;line-height:1.6;white-space:nowrap}
-			.otkazpro-badge--ok{background:#edfaef;color:#00691c}
-			.otkazpro-badge--warn{background:#fcf9e8;color:#8a4b00}
-			.otkazpro-badge--error{background:#fcf0f1;color:#a00}
-			.otkazpro-admin-items{margin:0}
-			.otkazpro-admin-items li{margin:0 0 2px}
-			.column-py_otkaz{width:90px}
-		</style>
-		<?php
+		wp_register_style( 'otkazpro-admin', false, array(), PY_OTKAZ_VERSION );
+		wp_enqueue_style( 'otkazpro-admin' );
+		wp_add_inline_style(
+			'otkazpro-admin',
+			'.otkazpro-badge{display:inline-block;padding:2px 8px;border-radius:10px;background:#f0f0f1;color:#50575e;font-size:12px;line-height:1.6;white-space:nowrap}'
+			. '.otkazpro-badge--ok{background:#edfaef;color:#00691c}'
+			. '.otkazpro-badge--warn{background:#fcf9e8;color:#8a4b00}'
+			. '.otkazpro-badge--error{background:#fcf0f1;color:#a00}'
+			. '.otkazpro-admin-items{margin:0}'
+			. '.otkazpro-admin-items li{margin:0 0 2px}'
+			. '.column-py_otkaz{width:90px}'
+		);
 	}
 
 	/**

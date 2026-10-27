@@ -277,8 +277,10 @@ class Exclusions {
 	 * @param \WC_Product $product Product.
 	 */
 	public static function save_product( $product ) {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing -- WooCommerce verifies the product nonce.
-		if ( ! isset( $_POST[ self::META_FLAG ] ) ) {
+		if ( ! isset( $_POST['woocommerce_meta_nonce'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['woocommerce_meta_nonce'] ) ), 'woocommerce_save_data' ) ) {
+			return;
+		}
+		if ( ! current_user_can( 'edit_product', $product->get_id() ) || ! isset( $_POST[ self::META_FLAG ] ) ) {
 			return;
 		}
 		self::save_to_product(
@@ -287,7 +289,6 @@ class Exclusions {
 			isset( $_POST[ self::META_REASON ] ) ? sanitize_key( wp_unslash( $_POST[ self::META_REASON ] ) ) : '',
 			isset( $_POST[ self::META_TEXT ] ) ? sanitize_text_field( wp_unslash( $_POST[ self::META_TEXT ] ) ) : ''
 		);
-		// phpcs:enable
 	}
 
 	/**
@@ -369,8 +370,10 @@ class Exclusions {
 	 * @param int $loop         Index.
 	 */
 	public static function save_variation( $variation_id, $loop ) {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing -- WooCommerce verifies the variations nonce.
-		if ( ! isset( $_POST[ self::META_FLAG ][ $loop ] ) ) {
+		if ( ! isset( $_POST['security'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['security'] ) ), 'save-variations' ) ) {
+			return;
+		}
+		if ( ! current_user_can( 'edit_product', $variation_id ) || ! isset( $_POST[ self::META_FLAG ][ $loop ] ) ) {
 			return;
 		}
 		$variation = wc_get_product( $variation_id );
@@ -384,7 +387,6 @@ class Exclusions {
 			isset( $_POST[ self::META_TEXT ][ $loop ] ) ? sanitize_text_field( wp_unslash( $_POST[ self::META_TEXT ][ $loop ] ) ) : ''
 		);
 		$variation->save();
-		// phpcs:enable
 	}
 
 	/**

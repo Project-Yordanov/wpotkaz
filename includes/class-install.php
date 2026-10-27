@@ -41,9 +41,6 @@ class Install {
 	 * Activation hook.
 	 */
 	public static function activate() {
-		// Translations are needed for the default page title.
-		load_plugin_textdomain( 'otkazpro', false, dirname( PY_OTKAZ_BASENAME ) . '/languages' ); // phpcs:ignore PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound -- bundled bg_BG translation for the page title.
-
 		self::take_over_old_editions();
 		self::restore_settings_if_wiped();
 		self::create_tables();

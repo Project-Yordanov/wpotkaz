@@ -287,10 +287,12 @@ class Form {
 				return $title . ' – ' . wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 			}
 		);
-		$main = '<main id="main" class="otkazpro-fallback" style="max-width:760px;margin:40px auto;padding:0 16px">'
-			. '<h1 class="otkazpro-fallback__title">' . esc_html( $title ) . '</h1>'
-			. self::shortcode()
-			. '</main>';
+		$main = static function () use ( $title ) {
+			echo '<main id="main" class="otkazpro-fallback" style="max-width:760px;margin:40px auto;padding:0 16px">';
+			echo '<h1 class="otkazpro-fallback__title">' . esc_html( $title ) . '</h1>';
+			echo self::shortcode(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- form markup from templates/, escaped there.
+			echo '</main>';
+		};
 
 		if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
 			// Block theme: render the theme's header/footer template parts ourselves.
@@ -310,7 +312,9 @@ class Form {
 			<?php wp_body_open(); ?>
 <div class="wp-site-blocks">
 			<?php
-			echo $header . $main . $footer; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rendered blocks / escaped above.
+			echo $header; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- theme template part rendered by do_blocks(), as in core's template canvas.
+			$main();
+			echo $footer; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- theme template part rendered by do_blocks(), as in core's template canvas.
 			?>
 </div>
 			<?php wp_footer(); ?>
@@ -320,7 +324,7 @@ class Form {
 			return;
 		}
 		get_header();
-		echo $main; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above / template output.
+		$main();
 		get_footer();
 	}
 
