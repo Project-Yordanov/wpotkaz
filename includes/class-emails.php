@@ -33,6 +33,7 @@ class Emails {
 	public static function register( $emails ) {
 		$emails['PY_Otkaz_Customer_Confirmation'] = new Emails\Customer_Confirmation();
 		$emails['PY_Otkaz_Admin_Notification']    = new Emails\Admin_Notification();
+		$emails['PY_Otkaz_Admin_Refund_Reminder'] = new Emails\Admin_Refund_Reminder();
 		return $emails;
 	}
 

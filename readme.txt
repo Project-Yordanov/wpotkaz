@@ -4,7 +4,7 @@ Tags: woocommerce, withdrawal, right of withdrawal, returns, gdpr
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.0.0
+Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,8 @@ Since 2026, online shops in the EU must let consumers withdraw from a distance c
 **For the shop**
 
 * Register of all statements (WooCommerce → Withdrawals) with filters, CSV export, IP and user agent as evidence, and “Resend confirmation”.
+* **Refund deadline tracking:** every statement shows how many days are left of the 14-day refund deadline. A daily email reminds the store of withdrawals whose deadline is near or past, and a withdrawal is marked as processed automatically when you refund the order.
+* **“Prepare refund”** opens the order with the WooCommerce refund form already filled in with the products and quantities of the statement – you check the amount and confirm the refund.
 * Order note, order meta box, badge in the orders list and an indicative “in time / late” marker (the form itself never closes).
 * Store notification email with a link to the order.
 * Products, variations or categories can be marked as **excluded from the right of withdrawal** (e.g. personalised or perishable goods) – soft mode (selectable with a warning) or strict mode. Optional storefront label in product, cart and checkout pages (classic and block checkout).
@@ -94,6 +96,13 @@ No. All data stays in your WordPress database and nothing is sent to third parti
 
 == Changelog ==
 
+= 2.1.0 =
+* New: 14-day refund deadline for every withdrawal (days left / overdue) in the register, the statement view and the order.
+* New: daily “Withdrawal refund reminder” email to the store for withdrawals whose refund deadline is near or past (WooCommerce → Settings → Emails).
+* New: withdrawals are marked as processed automatically when a refund is created in the order; “Mark as processed” / “Reopen” for the rest.
+* New: “Prepare refund” fills in the WooCommerce refund form with the products and quantities of the statement.
+* New: refund status filter and CSV columns.
+
 = 2.0.0 =
 * Published on WordPress.org as OtkazPro (previously distributed as WPOtkaz). Activating OtkazPro deactivates the previous edition and keeps all settings and records.
 * Brand-consistent URL parameters, CSS classes and form fields (`otkazpro_*`); old links from emails keep working.
@@ -104,6 +113,9 @@ No. All data stays in your WordPress database and nothing is sent to third parti
 * Fixed links in My account when another plugin imitates WPML.
 
 == Upgrade Notice ==
+
+= 2.1.0 =
+Adds refund deadline tracking, a store reminder email and “Prepare refund”. Existing withdrawals of orders that were already refunded are marked as processed.
 
 = 2.0.0 =
 If you used WPOtkaz from GitHub: install and activate OtkazPro, then delete WPOtkaz – settings and records are kept.

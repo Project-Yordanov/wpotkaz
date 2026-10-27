@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  */
 class Install {
 
-	const DB_VERSION        = '1.0.0';
+	const DB_VERSION        = '1.1.0';
 	const DB_VERSION_OPTION = 'py_otkaz_db_version';
 	const CRON_HOOK         = 'py_otkaz_daily_cleanup';
 	const PAGE_SLUG         = 'otkaz-ot-dogovor';
@@ -43,11 +43,10 @@ class Install {
 	public static function activate() {
 		self::take_over_old_editions();
 		self::restore_settings_if_wiped();
-		self::create_tables();
+		self::upgrade_schema();
 		self::maybe_create_page();
 		self::ensure_cron();
 		self::backup_settings();
-		update_option( self::DB_VERSION_OPTION, self::DB_VERSION, false );
 		update_option( 'py_otkaz_version', PY_OTKAZ_VERSION, false );
 		set_transient( 'py_otkaz_activated', 1, MINUTE_IN_SECONDS * 5 );
 		Cache_Check::schedule_soon();
@@ -132,8 +131,7 @@ class Install {
 	 */
 	public static function maybe_upgrade() {
 		if ( get_option( self::DB_VERSION_OPTION ) !== self::DB_VERSION ) {
-			self::create_tables();
-			update_option( self::DB_VERSION_OPTION, self::DB_VERSION, false );
+			self::upgrade_schema();
 		}
 		// After a plugin update: re-run the cache check once.
 		if ( get_option( 'py_otkaz_version' ) !== PY_OTKAZ_VERSION ) {
@@ -141,6 +139,18 @@ class Install {
 			Cache_Check::schedule_soon();
 			self::backup_settings();
 		}
+	}
+
+	/**
+	 * Create / update the table and migrate existing records, then store the DB version.
+	 */
+	private static function upgrade_schema() {
+		$from = (string) get_option( self::DB_VERSION_OPTION );
+		self::create_tables();
+		if ( '' !== $from && version_compare( $from, '1.1.0', '<' ) ) {
+			Refunds::migrate_existing();
+		}
+		update_option( self::DB_VERSION_OPTION, self::DB_VERSION, false );
 	}
 
 	/**
@@ -194,6 +204,9 @@ class Install {
   email_sent_gmt datetime NULL DEFAULT NULL,
   email_attempts smallint(5) unsigned NOT NULL DEFAULT 0,
   admin_email_status varchar(20) NOT NULL DEFAULT 'pending',
+  processed_gmt datetime NULL DEFAULT NULL,
+  processed_by varchar(20) NOT NULL DEFAULT '',
+  reminder_sent_gmt datetime NULL DEFAULT NULL,
   created_local datetime NOT NULL,
   created_gmt datetime NOT NULL,
   PRIMARY KEY  (id),
@@ -201,7 +214,8 @@ class Install {
   KEY order_id (order_id),
   KEY email (email(100)),
   KEY created_gmt (created_gmt),
-  KEY email_status (email_status)
+  KEY email_status (email_status),
+  KEY processed_gmt (processed_gmt)
 ) {$charset};";
 
 		dbDelta( $sql );

@@ -56,6 +56,12 @@ class Submission {
 	public $email_attempts = 0;
 	/** @var string */
 	public $admin_email_status = 'pending';
+	/** @var string|null */
+	public $processed_gmt = null;
+	/** @var string refund|manual */
+	public $processed_by = '';
+	/** @var string|null */
+	public $reminder_sent_gmt = null;
 	/** @var string */
 	public $created_local = '';
 	/** @var string */
@@ -125,7 +131,7 @@ class Submission {
 	/**
 	 * Query submissions.
 	 *
-	 * @param array $args search, order_id, email, deadline (in|late|open), email_status, date_from, date_to (Y-m-d), per_page, page, orderby, order.
+	 * @param array $args search, order_id, email, deadline (in|late|open), email_status, refund (open|overdue|processed), date_from, date_to (Y-m-d), per_page, page, orderby, order.
 	 * @return array ['items' => Submission[], 'total' => int]
 	 */
 	public static function query( $args = array() ) {
@@ -139,6 +145,7 @@ class Submission {
 				'email'        => '',
 				'deadline'     => '',
 				'email_status' => '',
+				'refund'       => '',
 				'date_from'    => '',
 				'date_to'      => '',
 				'per_page'     => 20,
@@ -177,6 +184,14 @@ class Submission {
 		if ( in_array( $args['email_status'], array( 'sent', 'failed', 'pending' ), true ) ) {
 			$where[]  = 'email_status = %s';
 			$params[] = $args['email_status'];
+		}
+		if ( 'processed' === $args['refund'] ) {
+			$where[] = 'processed_gmt IS NOT NULL';
+		} elseif ( 'open' === $args['refund'] ) {
+			$where[] = 'processed_gmt IS NULL';
+		} elseif ( 'overdue' === $args['refund'] ) {
+			$where[]  = 'processed_gmt IS NULL AND created_gmt < %s';
+			$params[] = Refunds::overdue_cutoff();
 		}
 		if ( $args['date_from'] && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $args['date_from'] ) ) {
 			$where[]  = 'created_local >= %s';
@@ -220,6 +235,25 @@ class Submission {
 		global $wpdb;
 		$table = Install::table();
 		return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i WHERE email_status = %s', $table, 'failed' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+	}
+
+	/**
+	 * Mark as processed (refund made / handled) or reopen.
+	 *
+	 * @param string $by refund|manual, or '' to reopen.
+	 */
+	public function set_processed( $by ) {
+		global $wpdb;
+		$this->processed_gmt = $by ? current_time( 'mysql', true ) : null;
+		$this->processed_by  = (string) $by;
+		$wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			Install::table(),
+			array(
+				'processed_gmt' => $this->processed_gmt,
+				'processed_by'  => $this->processed_by,
+			),
+			array( 'id' => $this->id )
+		);
 	}
 
 	/**
@@ -294,6 +328,43 @@ class Submission {
 	 */
 	public function total_qty() {
 		return (int) array_sum( wp_list_pluck( $this->items, 'qty' ) );
+	}
+
+	/**
+	 * Refund deadline (GMT timestamp): the shop must refund within 14 days of receiving the statement.
+	 *
+	 * @return int
+	 */
+	public function refund_due() {
+		return (int) strtotime( $this->created_gmt . ' UTC' ) + Refunds::days() * DAY_IN_SECONDS;
+	}
+
+	/**
+	 * Whole calendar days (site timezone) until the refund deadline; negative when overdue.
+	 *
+	 * @param int|null $now Timestamp.
+	 * @return int
+	 */
+	public function refund_days_left( $now = null ) {
+		$tz    = wp_timezone();
+		$due   = ( new \DateTimeImmutable( '@' . $this->refund_due() ) )->setTimezone( $tz )->setTime( 0, 0 );
+		$today = ( new \DateTimeImmutable( '@' . ( null === $now ? time() : (int) $now ) ) )->setTimezone( $tz )->setTime( 0, 0 );
+		return (int) round( ( $due->getTimestamp() - $today->getTimestamp() ) / DAY_IN_SECONDS );
+	}
+
+	/**
+	 * Refund state: processed, overdue, soon (reminder window) or open.
+	 *
+	 * @return string
+	 */
+	public function refund_state() {
+		if ( $this->processed_gmt ) {
+			return 'processed';
+		}
+		if ( time() > $this->refund_due() ) {
+			return 'overdue';
+		}
+		return $this->refund_days_left() <= Refunds::reminder_days() ? 'soon' : 'open';
 	}
 
 	/**

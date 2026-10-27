@@ -54,11 +54,12 @@ class Admin {
 	 * Submenu under WooCommerce.
 	 */
 	public static function menu() {
-		$failed = Submission::count_failed();
-		$title  = __( 'Withdrawals', 'otkazpro' );
-		$menu   = $title;
-		if ( $failed ) {
-			$menu .= ' <span class="awaiting-mod count-' . (int) $failed . '"><span class="pending-count">' . (int) $failed . '</span></span>';
+		// Needs attention: failed confirmations and refunds past the deadline.
+		$count = Submission::count_failed() + Refunds::count_overdue();
+		$title = __( 'Withdrawals', 'otkazpro' );
+		$menu  = $title;
+		if ( $count ) {
+			$menu .= ' <span class="awaiting-mod count-' . (int) $count . '"><span class="pending-count">' . (int) $count . '</span></span>';
 		}
 		add_submenu_page( 'woocommerce', $title, $menu, self::CAP, self::PAGE, array( __CLASS__, 'render' ) );
 	}
@@ -115,6 +116,7 @@ class Admin {
 			__( 'Email', 'otkazpro' )              => '<a href="mailto:' . esc_attr( $s->email ) . '">' . esc_html( $s->email ) . '</a>',
 			__( 'Deadline', 'otkazpro' )           => self::deadline_badge( $s ) . ( $s->deadline_gmt ? ' ' . esc_html( Util::format_gmt( $s->deadline_gmt, 'date' ) ) : '' ),
 			__( 'Products', 'otkazpro' )           => self::items_html( $s ),
+			__( 'Refund', 'otkazpro' )             => self::refund_html( $s, $order ),
 			__( 'Text of the statement', 'otkazpro' ) => '<blockquote>' . esc_html( $s->statement ) . '</blockquote>',
 			__( 'Reason (optional)', 'otkazpro' )  => '' !== $s->reason ? nl2br( esc_html( $s->reason ) ) : '—',
 			__( 'Source', 'otkazpro' )             => esc_html( self::source_label( $s->source ) ),
@@ -135,9 +137,27 @@ class Admin {
 					<?php endforeach; ?>
 				</tbody>
 			</table>
-			<p class="description" style="max-width:960px"><?php esc_html_e( 'The plugin does not cancel the order, refund the payment or restock automatically – process the withdrawal manually in the order (refund within 14 days of receiving the statement).', 'otkazpro' ); ?></p>
+			<p class="description" style="max-width:960px"><?php esc_html_e( 'The plugin does not cancel the order, refund the payment or restock automatically. “Prepare refund” opens the order with the WooCommerce refund form filled in – check the amount (on a full withdrawal also the standard delivery cost) and confirm the refund there. The withdrawal is then marked as processed automatically.', 'otkazpro' ); ?></p>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Refund state with due date and actions.
+	 *
+	 * @param Submission     $s     Submission.
+	 * @param \WC_Order|null $order Order.
+	 * @return string
+	 */
+	public static function refund_html( $s, $order = null ) {
+		if ( $s->processed_gmt ) {
+			$out = Refunds::badge( $s ) . ' ' . esc_html( Util::format_gmt( $s->processed_gmt, 'datetime' ) );
+		} else {
+			/* translators: %s: date */
+			$out = Refunds::badge( $s ) . ' ' . esc_html( sprintf( __( 'Refund due by %s', 'otkazpro' ), wp_date( get_option( 'date_format' ), $s->refund_due() ) ) );
+		}
+		$actions = ( $s->processed_gmt ? '' : Refunds::prepare_button( $s, $order ) . ' ' ) . Refunds::processed_button( $s );
+		return $out . '<p class="otkazpro-actions">' . $actions . '</p>';
 	}
 
 	/**
@@ -298,6 +318,8 @@ class Admin {
 			__( 'Excluded products', 'otkazpro' ),
 			__( 'Deadline', 'otkazpro' ),
 			__( 'Indicative deadline', 'otkazpro' ),
+			__( 'Refund due by', 'otkazpro' ),
+			__( 'Processed (UTC)', 'otkazpro' ),
 			__( 'Text of the statement', 'otkazpro' ),
 			__( 'Reason (optional)', 'otkazpro' ),
 			__( 'Source', 'otkazpro' ),
@@ -337,6 +359,8 @@ class Admin {
 				$s->has_excluded ? __( 'Yes', 'otkazpro' ) : __( 'No', 'otkazpro' ),
 				$deadline,
 				$s->deadline_gmt ? Util::format_gmt( $s->deadline_gmt, 'Y-m-d' ) : '',
+				wp_date( 'Y-m-d', $s->refund_due() ),
+				(string) $s->processed_gmt,
 				$s->statement,
 				$s->reason,
 				self::source_label( $s->source ),
@@ -562,6 +586,8 @@ class Admin {
 			. '.otkazpro-badge--error{background:#fcf0f1;color:#a00}'
 			. '.otkazpro-admin-items{margin:0}'
 			. '.otkazpro-admin-items li{margin:0 0 2px}'
+			. '.otkazpro-actions{margin:6px 0 0}'
+			. '.column-refund .button{margin:4px 4px 0 0}'
 			. '.column-py_otkaz{width:90px}'
 		);
 	}
@@ -655,12 +681,13 @@ class Admin {
 			echo '<p style="margin:0 0 4px"><a href="' . esc_url( self::url( array( 'view' => $s->id ) ) ) . '"><strong>' . esc_html( $s->number ) . '</strong></a> · ' . esc_html( Util::format_gmt( $s->created_gmt, 'datetime' ) ) . '</p>';
 			echo wp_kses_post( self::items_html( $s ) );
 			echo '<p style="margin:4px 0 0">' . wp_kses_post( self::deadline_badge( $s ) . ' ' . self::email_badge( $s ) ) . '</p>';
+			echo wp_kses_post( '<div style="margin:6px 0 0">' . self::refund_html( $s, $order ) . '</div>' );
 			echo '</div>';
 		}
 		if ( $deadline ) {
 			/* translators: %s: date */
 			echo '<p class="description">' . esc_html( sprintf( __( 'Indicative deadline: %s', 'otkazpro' ), wp_date( get_option( 'date_format' ), $deadline->getTimestamp() ) ) ) . '</p>';
 		}
-		echo '<p class="description">' . esc_html__( 'Refund and restock manually; the plugin does not change payments or stock.', 'otkazpro' ) . '</p>';
+		echo '<p class="description">' . esc_html__( '“Prepare refund” fills in the WooCommerce refund form of this order; check the amount and confirm it. The plugin never refunds or restocks by itself.', 'otkazpro' ) . '</p>';
 	}
 }

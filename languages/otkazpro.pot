@@ -2,9 +2,9 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: OtkazPro 2.0.0\n"
+"Project-Id-Version: OtkazPro 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-19 06:59+0000\n"
+"POT-Creation-Date: 2026-10-27 19:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,13 +21,13 @@ msgid "%1$d of %2$d"
 msgstr ""
 
 #. translators: 1: plugin name, 2: version, 3: agency name with link
-#: includes/class-admin.php:544
+#: includes/class-admin.php:568
 #, php-format
 msgid "%1$s %2$s · developed by %3$s"
 msgstr ""
 
 #. translators: 1: product name, 2: quantity
-#: includes/class-submission.php:310
+#: includes/class-submission.php:381
 #, php-format
 msgid "%1$s (%2$d pcs.)"
 msgstr ""
@@ -48,7 +48,7 @@ msgid "%1$s submitted a withdrawal from the contract for order #%2$s."
 msgstr ""
 
 #. translators: 1: product name, 2: quantity
-#: includes/class-submission.php:285
+#: includes/class-submission.php:319
 #: templates/form-success.php:57
 #, php-format
 msgid "%1$s × %2$d"
@@ -59,6 +59,14 @@ msgstr ""
 #, php-format
 msgid "%1$s – %2$d of %3$d"
 msgstr ""
+
+#. translators: %d: number of days
+#: includes/class-refunds.php:185
+#, php-format
+msgid "%d day left"
+msgid_plural "%d days left"
+msgstr[0] ""
+msgstr[1] ""
 
 #. translators: %s: date and time
 #: includes/class-settings.php:280
@@ -76,12 +84,12 @@ msgstr ""
 msgid "1 pc."
 msgstr ""
 
-#: includes/class-submission.php:389
+#: includes/class-submission.php:460
 msgid "A withdrawal cannot be submitted online for this order in its current status. Please contact us."
 msgstr ""
 
 #. translators: %s: product name
-#: includes/class-submission.php:412
+#: includes/class-submission.php:483
 #, php-format
 msgid "A withdrawal for “%s” has already been submitted."
 msgstr ""
@@ -107,15 +115,15 @@ msgstr ""
 msgid "Adds the online withdrawal function required by EU Directive 2023/2673 (Bulgaria: Art. 52a of the Consumer Protection Act) to WooCommerce: a “Withdraw from the contract here” button, a two-step form, partial withdrawal, an instant confirmation email and a register of statements."
 msgstr ""
 
-#: includes/class-admin-list-table.php:134
-#: includes/class-admin.php:176
-#: includes/class-admin.php:322
+#: includes/class-admin-list-table.php:136
+#: includes/class-admin.php:196
+#: includes/class-admin.php:344
 #: templates/emails/parts/otkaz-details.php:51
 #: templates/emails/plain/parts/otkaz-details.php:27
 msgid "After the deadline"
 msgstr ""
 
-#: includes/class-admin.php:130
+#: includes/class-admin.php:132
 msgid "All withdrawals"
 msgstr ""
 
@@ -135,12 +143,16 @@ msgstr ""
 msgid "An online withdrawal is not available for this order in its current status (%1$s). Please contact us at %2$s."
 msgstr ""
 
-#: includes/class-admin-list-table.php:132
+#: includes/class-admin-list-table.php:134
 msgid "Any deadline"
 msgstr ""
 
-#: includes/class-admin-list-table.php:139
+#: includes/class-admin-list-table.php:141
 msgid "Any email status"
+msgstr ""
+
+#: includes/class-admin-list-table.php:147
+msgid "Any refund status"
 msgstr ""
 
 #: includes/class-settings.php:506
@@ -159,7 +171,7 @@ msgstr ""
 msgid "Cached"
 msgstr ""
 
-#: includes/class-admin.php:411
+#: includes/class-admin.php:435
 #: includes/class-settings.php:286
 msgid "Check cache now"
 msgstr ""
@@ -184,8 +196,8 @@ msgstr ""
 msgid "Confirm withdrawal"
 msgstr ""
 
-#: includes/class-admin-list-table.php:70
-#: includes/class-admin-list-table.php:137
+#: includes/class-admin-list-table.php:72
+#: includes/class-admin-list-table.php:139
 msgid "Confirmation"
 msgstr ""
 
@@ -197,7 +209,7 @@ msgstr ""
 msgid "Confirmation of your withdrawal {otkaz_number} – order #{order_number}"
 msgstr ""
 
-#: includes/class-admin.php:308
+#: includes/class-admin.php:330
 msgid "Confirmation sent (UTC)"
 msgstr ""
 
@@ -205,7 +217,7 @@ msgstr ""
 msgid "Corner radius"
 msgstr ""
 
-#: includes/class-admin.php:486
+#: includes/class-admin.php:510
 msgid "Create a separate page"
 msgstr ""
 
@@ -213,16 +225,17 @@ msgstr ""
 msgid "Critical"
 msgstr ""
 
-#: includes/class-admin-list-table.php:67
+#: includes/class-admin-list-table.php:68
+#: templates/emails/admin-refund-reminder.php:27
 msgid "Customer"
 msgstr ""
 
-#: includes/class-admin.php:293
+#: includes/class-admin.php:313
 msgid "Customer ID"
 msgstr ""
 
-#: includes/class-admin.php:124
-#: includes/class-admin.php:307
+#: includes/class-admin.php:126
+#: includes/class-admin.php:329
 msgid "Customer confirmation"
 msgstr ""
 
@@ -234,14 +247,14 @@ msgstr ""
 msgid "Data retention"
 msgstr ""
 
-#: includes/class-admin-list-table.php:65
+#: includes/class-admin-list-table.php:66
 msgid "Date"
 msgstr ""
 
-#: includes/class-admin-list-table.php:69
-#: includes/class-admin-list-table.php:130
-#: includes/class-admin.php:116
-#: includes/class-admin.php:299
+#: includes/class-admin-list-table.php:70
+#: includes/class-admin-list-table.php:132
+#: includes/class-admin.php:117
+#: includes/class-admin.php:319
 #: templates/emails/parts/otkaz-details.php:46
 msgid "Deadline"
 msgstr ""
@@ -251,12 +264,12 @@ msgid "Delete data on uninstall"
 msgstr ""
 
 #. translators: %s: agency name with link
-#: includes/class-admin.php:525
+#: includes/class-admin.php:549
 #, php-format
 msgid "Developed by %s"
 msgstr ""
 
-#: includes/class-admin.php:204
+#: includes/class-admin.php:224
 msgid "Disabled"
 msgstr ""
 
@@ -268,7 +281,7 @@ msgstr ""
 msgid "Done"
 msgstr ""
 
-#: includes/class-admin.php:487
+#: includes/class-admin.php:511
 msgid "Edit the page manually"
 msgstr ""
 
@@ -276,8 +289,8 @@ msgstr ""
 msgid "Eligible order statuses"
 msgstr ""
 
-#: includes/class-admin.php:115
-#: includes/class-admin.php:295
+#: includes/class-admin.php:116
+#: includes/class-admin.php:315
 #: includes/class-privacy.php:97
 #: templates/emails/parts/otkaz-details.php:31
 #: templates/emails/plain/parts/otkaz-details.php:20
@@ -288,8 +301,8 @@ msgstr ""
 msgid "Email for the confirmation"
 msgstr ""
 
-#: includes/class-admin-list-table.php:141
-#: includes/class-admin.php:189
+#: includes/class-admin-list-table.php:143
+#: includes/class-admin.php:209
 msgid "Email not sent"
 msgstr ""
 
@@ -302,7 +315,7 @@ msgid "Emails"
 msgstr ""
 
 #. translators: 1: product name, 2: maximum quantity
-#: includes/class-submission.php:418
+#: includes/class-submission.php:489
 #, php-format
 msgid "Enter a quantity between 1 and %2$d for “%1$s”."
 msgstr ""
@@ -331,8 +344,8 @@ msgstr ""
 msgid "Excluded from the right of withdrawal"
 msgstr ""
 
-#: includes/class-admin-list-table.php:182
-#: includes/class-admin.php:158
+#: includes/class-admin-list-table.php:192
+#: includes/class-admin.php:178
 msgid "Excluded product"
 msgstr ""
 
@@ -343,19 +356,19 @@ msgstr ""
 msgid "Excluded product: %s"
 msgstr ""
 
-#: includes/class-admin.php:298
+#: includes/class-admin.php:318
 msgid "Excluded products"
 msgstr ""
 
-#: includes/class-admin-list-table.php:168
+#: includes/class-admin-list-table.php:178
 msgid "Export CSV"
 msgstr ""
 
-#: includes/class-admin.php:202
+#: includes/class-admin.php:222
 msgid "Failed"
 msgstr ""
 
-#: includes/class-admin-list-table.php:147
+#: includes/class-admin-list-table.php:156
 msgid "Filter"
 msgstr ""
 
@@ -375,7 +388,7 @@ msgstr ""
 msgid "Form page"
 msgstr ""
 
-#: includes/class-admin-list-table.php:143
+#: includes/class-admin-list-table.php:152
 msgid "From"
 msgstr ""
 
@@ -408,30 +421,30 @@ msgstr ""
 msgid "I hereby give notice that I withdraw from the contract for the following goods: {items}, order No. {order_number}, submitted on {date} at {time}."
 msgstr ""
 
-#: includes/class-admin.php:122
-#: includes/class-admin.php:305
+#: includes/class-admin.php:124
+#: includes/class-admin.php:327
 #: includes/class-privacy.php:109
 msgid "IP address"
 msgstr ""
 
-#: includes/class-admin-list-table.php:133
-#: includes/class-admin.php:173
-#: includes/class-admin.php:320
+#: includes/class-admin-list-table.php:135
+#: includes/class-admin.php:193
+#: includes/class-admin.php:342
 #: templates/emails/parts/otkaz-details.php:49
 #: templates/emails/plain/parts/otkaz-details.php:25
 msgid "In time"
 msgstr ""
 
-#: includes/class-submission.php:523
+#: includes/class-submission.php:594
 msgid "Includes products marked as excluded from withdrawal."
 msgstr ""
 
-#: includes/class-admin.php:300
+#: includes/class-admin.php:320
 msgid "Indicative deadline"
 msgstr ""
 
 #. translators: %s: date
-#: includes/class-admin.php:662
+#: includes/class-admin.php:689
 #, php-format
 msgid "Indicative deadline: %s"
 msgstr ""
@@ -448,8 +461,8 @@ msgstr ""
 msgid "Keep records (years)"
 msgstr ""
 
-#: includes/class-admin.php:121
-#: includes/class-admin.php:304
+#: includes/class-admin.php:123
+#: includes/class-admin.php:326
 msgid "Language"
 msgstr ""
 
@@ -462,7 +475,7 @@ msgstr ""
 msgid "Liable to deteriorate or expire rapidly"
 msgstr ""
 
-#: includes/class-admin.php:218
+#: includes/class-admin.php:238
 msgid "Link from email"
 msgstr ""
 
@@ -478,6 +491,10 @@ msgstr ""
 msgid "Made to the consumer’s specifications or personalised"
 msgstr ""
 
+#: includes/class-refunds.php:211
+msgid "Mark as processed"
+msgstr ""
+
 #: includes/class-settings.php:470
 msgid "Mark products in the product / variation / category edit screens. Do not mark goods that lose the right only once unsealed (hygiene, cosmetics, sealed media)."
 msgstr ""
@@ -490,12 +507,12 @@ msgstr ""
 msgid "Move the order to a custom “Withdrawal requested” status after each submission."
 msgstr ""
 
-#: includes/class-admin.php:219
+#: includes/class-admin.php:239
 msgid "My account"
 msgstr ""
 
-#: includes/class-admin.php:114
-#: includes/class-admin.php:294
+#: includes/class-admin.php:115
+#: includes/class-admin.php:314
 #: includes/class-privacy.php:93
 #: templates/emails/parts/otkaz-details.php:30
 #: templates/emails/plain/parts/otkaz-details.php:19
@@ -510,7 +527,7 @@ msgstr ""
 msgid "New withdrawal from contract"
 msgstr ""
 
-#: includes/class-admin.php:337
+#: includes/class-admin.php:359
 msgid "No"
 msgstr ""
 
@@ -533,7 +550,7 @@ msgstr ""
 msgid "No right of withdrawal: %s."
 msgstr ""
 
-#: includes/class-admin-list-table.php:115
+#: includes/class-admin-list-table.php:117
 msgid "No withdrawals yet."
 msgstr ""
 
@@ -541,17 +558,21 @@ msgstr ""
 msgid "Not checked"
 msgstr ""
 
+#: includes/class-admin-list-table.php:148
+msgid "Not processed"
+msgstr ""
+
 #: templates/form-order.php:178
 msgid "Not required. Your withdrawal is valid without a reason."
 msgstr ""
 
-#: includes/class-admin-list-table.php:135
-#: includes/class-admin.php:178
-#: includes/class-admin.php:324
+#: includes/class-admin-list-table.php:137
+#: includes/class-admin.php:198
+#: includes/class-admin.php:346
 msgid "Not started"
 msgstr ""
 
-#: includes/class-admin-list-table.php:64
+#: includes/class-admin-list-table.php:65
 msgid "Number"
 msgstr ""
 
@@ -567,7 +588,7 @@ msgstr ""
 msgid "Off by default: the law does not provide for asking a reason. Enable only after legal review."
 msgstr ""
 
-#: includes/class-submission.php:402
+#: includes/class-submission.php:473
 msgid "One of the selected products is not part of this order."
 msgstr ""
 
@@ -587,14 +608,18 @@ msgstr ""
 msgid "Open OtkazPro settings"
 msgstr ""
 
-#: includes/class-admin.php:367
-#: includes/class-admin.php:428
+#: includes/class-admin.php:391
+#: includes/class-admin.php:452
 msgid "Open settings"
 msgstr ""
 
 #: templates/emails/admin-new-otkaz.php:49
 #: templates/emails/plain/admin-new-otkaz.php:41
 msgid "Open the order"
+msgstr ""
+
+#: templates/emails/admin-refund-reminder.php:55
+msgid "Open withdrawals in the register"
 msgstr ""
 
 #: includes/class-settings.php:420
@@ -605,8 +630,8 @@ msgstr ""
 msgid "Or find another order below."
 msgstr ""
 
-#: includes/class-admin-list-table.php:66
-#: includes/class-admin.php:113
+#: includes/class-admin-list-table.php:67
+#: includes/class-admin.php:114
 #: includes/class-privacy.php:89
 #: templates/emails/parts/otkaz-details.php:32
 #: templates/emails/plain/parts/otkaz-details.php:21
@@ -625,7 +650,7 @@ msgstr ""
 msgid "Order #%s"
 msgstr ""
 
-#: includes/class-admin.php:291
+#: includes/class-admin.php:311
 msgid "Order ID"
 msgstr ""
 
@@ -633,12 +658,12 @@ msgstr ""
 msgid "Order details / invoice"
 msgstr ""
 
-#: includes/class-admin.php:292
+#: includes/class-admin.php:312
 #: templates/form-lookup.php:64
 msgid "Order number"
 msgstr ""
 
-#: includes/class-admin.php:217
+#: includes/class-admin.php:237
 msgid "Order number + email"
 msgstr ""
 
@@ -660,21 +685,21 @@ msgstr ""
 msgid "Other (specify)"
 msgstr ""
 
-#: includes/class-admin.php:365
+#: includes/class-admin.php:389
 msgid "OtkazPro is active. A “Withdrawal from contract” page was created – review the settings and add the link to your footer."
 msgstr ""
 
 #. translators: %s: minimum WooCommerce version
-#: otkazpro.php:119
+#: otkazpro.php:110
 #, php-format
 msgid "OtkazPro requires WooCommerce %s or newer to be installed and active."
 msgstr ""
 
-#: includes/class-admin.php:378
+#: includes/class-admin.php:402
 msgid "OtkazPro restored its settings, which were removed when the previous edition was deleted."
 msgstr ""
 
-#: includes/class-admin.php:374
+#: includes/class-admin.php:398
 msgid "OtkazPro took over the settings and withdrawal records of the previous edition (WPOtkaz) and deactivated it. You can now delete WPOtkaz from the Plugins screen – the data stays."
 msgstr ""
 
@@ -683,12 +708,12 @@ msgstr ""
 msgid "OtkazPro – Withdrawal Button for WooCommerce"
 msgstr ""
 
-#: includes/class-admin.php:408
-#: includes/class-admin.php:425
+#: includes/class-admin.php:432
+#: includes/class-admin.php:449
 msgid "OtkazPro:"
 msgstr ""
 
-#: includes/class-admin.php:471
+#: includes/class-admin.php:495
 msgid "OtkazPro: a page “Withdrawal from contract” already exists"
 msgstr ""
 
@@ -699,6 +724,20 @@ msgstr ""
 #: includes/class-cache-check.php:358
 msgid "OtkazPro: withdrawal form is not cached"
 msgstr ""
+
+#: includes/class-admin-list-table.php:149
+#: templates/emails/admin-refund-reminder.php:47
+#: templates/emails/plain/admin-refund-reminder.php:29
+msgid "Overdue"
+msgstr ""
+
+#. translators: %d: number of days
+#: includes/class-refunds.php:179
+#, php-format
+msgid "Overdue by %d day"
+msgid_plural "Overdue by %d days"
+msgstr[0] ""
+msgstr[1] ""
 
 #: includes/class-settings.php:335
 msgid "Page cache check"
@@ -712,7 +751,7 @@ msgstr ""
 msgid "Pages with a query string are served from cache: a customer’s order page could be shown to other visitors."
 msgstr ""
 
-#: includes/class-admin.php:203
+#: includes/class-admin.php:223
 msgid "Pending"
 msgstr ""
 
@@ -743,7 +782,7 @@ msgstr ""
 msgid "Please check the following:"
 msgstr ""
 
-#: includes/class-submission.php:442
+#: includes/class-submission.php:513
 msgid "Please correct the highlighted fields."
 msgstr ""
 
@@ -751,8 +790,21 @@ msgstr ""
 msgid "Please keep this email – it is your confirmation of the withdrawal."
 msgstr ""
 
+#: includes/class-refunds.php:245
+msgid "Prepare refund"
+msgstr ""
+
 #: templates/form-success.php:74
 msgid "Print"
+msgstr ""
+
+#: includes/class-admin-list-table.php:150
+#: includes/class-refunds.php:171
+msgid "Processed"
+msgstr ""
+
+#: includes/class-admin.php:322
+msgid "Processed (UTC)"
 msgstr ""
 
 #: includes/class-settings.php:304
@@ -763,9 +815,9 @@ msgstr ""
 msgid "Product"
 msgstr ""
 
-#: includes/class-admin-list-table.php:68
-#: includes/class-admin.php:117
-#: includes/class-admin.php:296
+#: includes/class-admin-list-table.php:69
+#: includes/class-admin.php:118
+#: includes/class-admin.php:316
 #: includes/class-privacy.php:101
 #: templates/emails/parts/otkaz-details.php:68
 msgid "Products"
@@ -803,8 +855,8 @@ msgstr ""
 msgid "Reason"
 msgstr ""
 
-#: includes/class-admin.php:119
-#: includes/class-admin.php:302
+#: includes/class-admin.php:121
+#: includes/class-admin.php:324
 #: templates/emails/parts/otkaz-details.php:62
 #: templates/emails/plain/parts/otkaz-details.php:33
 #: templates/form-order.php:177
@@ -821,15 +873,46 @@ msgstr ""
 msgid "Reason text (for “Other”)"
 msgstr ""
 
-#: includes/class-admin.php:664
-msgid "Refund and restock manually; the plugin does not change payments or stock."
+#: includes/class-admin-list-table.php:71
+#: includes/class-admin-list-table.php:145
+#: includes/class-admin.php:119
+msgid "Refund"
+msgstr ""
+
+#: includes/class-admin.php:321
+#: templates/emails/admin-refund-reminder.php:28
+#: templates/emails/plain/admin-refund-reminder.php:27
+msgid "Refund due by"
+msgstr ""
+
+#. translators: %s: date
+#: includes/class-admin.php:157
+#: includes/class-refunds.php:189
+#, php-format
+msgid "Refund due by %s"
+msgstr ""
+
+#: includes/class-refunds.php:183
+msgid "Refund due today"
 msgstr ""
 
 #: includes/emails/class-admin-notification.php:59
 msgid "Refund the payments received, including standard delivery costs, without undue delay and not later than 14 days from today. You may withhold the refund until you have received the goods back or proof of sending."
 msgstr ""
 
-#: includes/class-admin.php:241
+#: includes/class-refunds.php:171
+msgid "Refunded"
+msgstr ""
+
+#: includes/emails/class-admin-refund-reminder.php:67
+msgid "Refunds are marked as processed automatically when you create a refund in the order. If a withdrawal needs no refund, use “Mark as processed” in WooCommerce → Withdrawals."
+msgstr ""
+
+#: includes/class-refunds.php:211
+msgid "Reopen"
+msgstr ""
+
+#: includes/class-admin.php:261
 msgid "Resend"
 msgstr ""
 
@@ -852,7 +935,7 @@ msgstr ""
 msgid "Same as parent product"
 msgstr ""
 
-#: includes/class-admin.php:90
+#: includes/class-admin.php:91
 msgid "Search"
 msgstr ""
 
@@ -868,7 +951,7 @@ msgstr ""
 msgid "Select at least one product to continue."
 msgstr ""
 
-#: includes/class-submission.php:439
+#: includes/class-submission.php:510
 msgid "Select at least one product."
 msgstr ""
 
@@ -878,11 +961,11 @@ msgstr ""
 msgid "Selected: %1$s products, %2$s pcs."
 msgstr ""
 
-#: includes/class-admin.php:241
+#: includes/class-admin.php:261
 msgid "Send again"
 msgstr ""
 
-#: includes/class-admin.php:309
+#: includes/class-admin.php:331
 msgid "Send attempts"
 msgstr ""
 
@@ -890,8 +973,8 @@ msgstr ""
 msgid "Sending…"
 msgstr ""
 
-#: includes/class-admin-list-table.php:140
-#: includes/class-admin.php:201
+#: includes/class-admin-list-table.php:142
+#: includes/class-admin.php:221
 msgid "Sent"
 msgstr ""
 
@@ -903,8 +986,12 @@ msgstr ""
 msgid "Sent to the store when a customer submits a withdrawal statement. Recipients are set in WooCommerce → Settings → Withdrawal."
 msgstr ""
 
-#: includes/class-admin.php:85
-#: includes/class-plugin.php:84
+#: includes/emails/class-admin-refund-reminder.php:34
+msgid "Sent to the store when the 14-day refund deadline of a withdrawal is near and the withdrawal is not marked as processed. Each withdrawal is included once. Recipients are set in WooCommerce → Settings → Withdrawal."
+msgstr ""
+
+#: includes/class-admin.php:86
+#: includes/class-plugin.php:85
 msgid "Settings"
 msgstr ""
 
@@ -928,8 +1015,8 @@ msgstr ""
 msgid "Soft – selectable with a warning, flagged for you"
 msgstr ""
 
-#: includes/class-admin.php:120
-#: includes/class-admin.php:303
+#: includes/class-admin.php:122
+#: includes/class-admin.php:325
 msgid "Source"
 msgstr ""
 
@@ -937,8 +1024,8 @@ msgstr ""
 msgid "Start button"
 msgstr ""
 
-#: includes/class-admin.php:111
-#: includes/class-admin.php:288
+#: includes/class-admin.php:112
+#: includes/class-admin.php:308
 #: includes/class-privacy.php:81
 #: templates/emails/parts/otkaz-details.php:23
 #: templates/emails/plain/parts/otkaz-details.php:16
@@ -955,8 +1042,8 @@ msgstr ""
 msgid "Step %1$d of %2$d:"
 msgstr ""
 
-#: includes/class-admin.php:125
-#: includes/class-admin.php:310
+#: includes/class-admin.php:127
+#: includes/class-admin.php:332
 msgid "Store notification"
 msgstr ""
 
@@ -978,20 +1065,20 @@ msgstr ""
 msgid "Subjects, headings and design of the two emails are edited in %s."
 msgstr ""
 
-#: includes/class-admin.php:290
+#: includes/class-admin.php:310
 msgid "Submitted (UTC)"
 msgstr ""
 
-#: includes/class-admin.php:289
+#: includes/class-admin.php:309
 msgid "Submitted (local)"
 msgstr ""
 
-#: includes/class-submission.php:526
+#: includes/class-submission.php:597
 msgid "Submitted after the indicative deadline."
 msgstr ""
 
 #. translators: 1: date, 2: time
-#: includes/class-admin.php:112
+#: includes/class-admin.php:113
 #: includes/class-privacy.php:85
 #: templates/emails/parts/otkaz-details.php:24
 #: templates/emails/plain/parts/otkaz-details.php:18
@@ -999,8 +1086,8 @@ msgstr ""
 msgid "Submitted on"
 msgstr ""
 
-#: includes/class-admin.php:118
-#: includes/class-admin.php:301
+#: includes/class-admin.php:120
+#: includes/class-admin.php:323
 #: includes/class-privacy.php:105
 #: templates/emails/parts/otkaz-details.php:104
 #: templates/emails/plain/parts/otkaz-details.php:48
@@ -1024,15 +1111,15 @@ msgstr ""
 msgid "The confirmation email to the customer could not be sent. Use “Resend” in WooCommerce → Withdrawals."
 msgstr ""
 
-#: includes/class-admin.php:384
+#: includes/class-admin.php:408
 msgid "The confirmation was sent to the customer."
 msgstr ""
 
-#: includes/class-admin.php:394
+#: includes/class-admin.php:418
 msgid "The email could not be sent. Check your SMTP settings and WooCommerce → Status → Logs (source “otkazpro”)."
 msgstr ""
 
-#: includes/class-admin.php:489
+#: includes/class-admin.php:513
 msgid "The existing content is kept. If the page contains an old returns form (Contact Form 7, WPForms, Forminator), remove it afterwards so customers see only one form. A complaints form stays separate."
 msgstr ""
 
@@ -1066,21 +1153,21 @@ msgstr ""
 msgid "The name is too long."
 msgstr ""
 
-#: includes/class-submission.php:386
+#: includes/class-submission.php:457
 msgid "The order could not be found."
 msgstr ""
 
-#: includes/class-admin.php:178
+#: includes/class-admin.php:198
 msgid "The order was not completed when the statement was submitted."
 msgstr ""
 
 #. translators: 1: page title with link, 2: page status
-#: includes/class-admin.php:477
+#: includes/class-admin.php:501
 #, php-format
 msgid "The page %1$s (%2$s) uses the address that OtkazPro needs, so no new page was created and nothing was changed. Choose how to continue:"
 msgstr ""
 
-#: includes/class-admin.php:392
+#: includes/class-admin.php:416
 msgid "The page could not be updated. Add [otkazpro] to the page manually and select it in the settings."
 msgstr ""
 
@@ -1092,8 +1179,8 @@ msgstr ""
 msgid "The page was open for too long. Please submit the form again."
 msgstr ""
 
-#: includes/class-admin.php:138
-msgid "The plugin does not cancel the order, refund the payment or restock automatically – process the withdrawal manually in the order (refund within 14 days of receiving the statement)."
+#: includes/class-admin.php:140
+msgid "The plugin does not cancel the order, refund the payment or restock automatically. “Prepare refund” opens the order with the WooCommerce refund form filled in – check the amount (on a full withdrawal also the standard delivery cost) and confirm the refund there. The withdrawal is then marked as processed automatically."
 msgstr ""
 
 #. translators: %s: store email
@@ -1111,7 +1198,7 @@ msgstr ""
 msgid "The withdrawal form page is cached or could not be checked"
 msgstr ""
 
-#: includes/class-admin.php:426
+#: includes/class-admin.php:450
 msgid "The withdrawal form page is missing, not published or no longer contains the form. Customers are sent to a fallback page so the function keeps working – select a page with [otkazpro] in the settings."
 msgstr ""
 
@@ -1119,8 +1206,13 @@ msgstr ""
 msgid "The withdrawal form page is not cached"
 msgstr ""
 
-#: includes/class-admin.php:390
+#: includes/class-admin.php:414
 msgid "The withdrawal form page is set up. Check it and add the link to your footer."
+msgstr ""
+
+#: templates/emails/admin-refund-reminder.php:21
+#: templates/emails/plain/admin-refund-reminder.php:22
+msgid "These withdrawals are not marked as processed yet and their 14-day refund deadline is near or has passed:"
 msgstr ""
 
 #: includes/class-form.php:531
@@ -1134,7 +1226,7 @@ msgstr ""
 msgid "This product is marked as having no right of withdrawal (%s). You can still select it – the store will review your request."
 msgstr ""
 
-#: includes/class-admin-list-table.php:145
+#: includes/class-admin-list-table.php:154
 msgid "To"
 msgstr ""
 
@@ -1142,11 +1234,11 @@ msgstr ""
 msgid "Too many unsuccessful attempts. Please try again in 15 minutes or contact us."
 msgstr ""
 
-#: includes/class-admin.php:297
+#: includes/class-admin.php:317
 msgid "Total quantity"
 msgstr ""
 
-#: includes/class-admin.php:485
+#: includes/class-admin.php:509
 msgid "Use this page – add the form at the end"
 msgstr ""
 
@@ -1154,8 +1246,8 @@ msgstr ""
 msgid "Used only for the admin “in time / late” indicator (counted from the completed date). The form never closes automatically."
 msgstr ""
 
-#: includes/class-admin.php:123
-#: includes/class-admin.php:306
+#: includes/class-admin.php:125
+#: includes/class-admin.php:328
 #: includes/class-privacy.php:113
 msgid "User agent"
 msgstr ""
@@ -1211,15 +1303,22 @@ msgstr ""
 msgid "Withdraw from the contract here"
 msgstr ""
 
-#: includes/class-admin.php:580
-#: includes/class-admin.php:584
-#: includes/class-admin.php:616
+#: includes/class-admin.php:606
+#: includes/class-admin.php:610
+#: includes/class-admin.php:642
 #: includes/class-settings.php:181
+#: templates/emails/admin-refund-reminder.php:26
 msgid "Withdrawal"
 msgstr ""
 
+#. translators: 1: statement number, 2: refund ID
+#: includes/class-refunds.php:87
+#, php-format
+msgid "Withdrawal %1$s marked as processed (refund #%2$d)."
+msgstr ""
+
 #. translators: 1: statement number, 2: items
-#: includes/class-submission.php:518
+#: includes/class-submission.php:589
 #, php-format
 msgid "Withdrawal %1$s submitted for: %2$s."
 msgstr ""
@@ -1230,10 +1329,23 @@ msgstr ""
 msgid "Withdrawal %1$s submitted on %2$s"
 msgstr ""
 
-#. translators: %s: number
-#: includes/class-admin.php:129
+#. translators: %s: statement number
+#: includes/class-admin.php:131
+#: includes/class-refunds.php:244
 #, php-format
 msgid "Withdrawal %s"
+msgstr ""
+
+#. translators: %s: statement number
+#: includes/class-refunds.php:267
+#, php-format
+msgid "Withdrawal %s marked as processed."
+msgstr ""
+
+#. translators: %s: statement number
+#: includes/class-refunds.php:269
+#, php-format
+msgid "Withdrawal %s reopened."
 msgstr ""
 
 #: templates/form-order.php:164
@@ -1245,19 +1357,19 @@ msgid "Withdrawal confirmation"
 msgstr ""
 
 #. translators: 1: statement number, 2: email
-#: includes/class-admin.php:259
+#: includes/class-admin.php:279
 #, php-format
 msgid "Withdrawal confirmation %1$s resent to %2$s."
 msgstr ""
 
 #: includes/class-account.php:65
-#: includes/class-admin.php:639
+#: includes/class-admin.php:665
 #: includes/class-form.php:283
-#: includes/class-install.php:250
+#: includes/class-install.php:261
 msgid "Withdrawal from contract"
 msgstr ""
 
-#: includes/class-admin.php:106
+#: includes/class-admin.php:107
 msgid "Withdrawal not found."
 msgstr ""
 
@@ -1273,6 +1385,10 @@ msgstr ""
 #: includes/class-privacy.php:195
 #, php-format
 msgid "Withdrawal records are kept for %d years and then deleted automatically."
+msgstr ""
+
+#: includes/emails/class-admin-refund-reminder.php:33
+msgid "Withdrawal refund reminder"
 msgstr ""
 
 #. translators: %s: number of orders
@@ -1296,28 +1412,32 @@ msgid "Withdrawal submitted on %2$s for %1$d pcs. (%3$s)"
 msgstr ""
 
 #. translators: %d: count
-#: includes/class-admin.php:615
+#: includes/class-admin.php:641
 #, php-format
 msgid "Withdrawal ×%d"
 msgstr ""
 
-#: includes/class-admin.php:58
-#: includes/class-plugin.php:85
+#: includes/class-admin.php:59
+#: includes/class-plugin.php:86
 msgid "Withdrawals"
 msgstr ""
 
-#: includes/class-admin.php:84
+#: includes/class-admin.php:85
 #: includes/class-privacy.php:37
 #: includes/class-privacy.php:51
 #: includes/class-privacy.php:77
 msgid "Withdrawals from contract"
 msgstr ""
 
+#: includes/emails/class-admin-refund-reminder.php:58
+msgid "Withdrawals waiting for a refund"
+msgstr ""
+
 #: includes/class-settings.php:439
 msgid "WooCommerce → Settings → Emails"
 msgstr ""
 
-#: includes/class-admin.php:337
+#: includes/class-admin.php:359
 msgid "Yes"
 msgstr ""
 
@@ -1329,18 +1449,19 @@ msgstr ""
 msgid "You can withdraw from the contract online without giving a reason."
 msgstr ""
 
-#: includes/class-emails.php:189
+#: includes/class-emails.php:190
 msgid "You can withdraw from the contract within 14 days of receiving the goods, without giving a reason:"
 msgstr ""
 
-#: includes/class-admin.php:251
-#: includes/class-admin.php:273
-#: includes/class-admin.php:500
+#: includes/class-admin.php:271
+#: includes/class-admin.php:293
+#: includes/class-admin.php:524
 #: includes/class-cache-check.php:334
+#: includes/class-refunds.php:256
 msgid "You do not have permission to do this."
 msgstr ""
 
-#: includes/class-admin.php:71
+#: includes/class-admin.php:72
 msgid "You do not have permission to view this page."
 msgstr ""
 
@@ -1360,7 +1481,7 @@ msgstr ""
 msgid "Your orders"
 msgstr ""
 
-#: includes/class-submission.php:500
+#: includes/class-submission.php:571
 msgid "Your withdrawal could not be saved due to a technical error. Please try again or contact us by email."
 msgstr ""
 
@@ -1384,6 +1505,10 @@ msgstr ""
 msgid "[{site_title}] New withdrawal {otkaz_number} – order #{order_number}"
 msgstr ""
 
+#: includes/emails/class-admin-refund-reminder.php:49
+msgid "[{site_title}] Refund deadline: {count} withdrawal(s) to process"
+msgstr ""
+
 #: includes/class-cache-check.php:305
 msgid "a page cache (plugin, hosting or CDN)"
 msgstr ""
@@ -1395,16 +1520,20 @@ msgid "indicative deadline %s"
 msgstr ""
 
 #. translators: %d: max quantity
-#: includes/class-admin.php:155
+#: includes/class-admin.php:175
 #: templates/parts/item.php:123
 #, php-format
 msgid "of %d"
 msgstr ""
 
 #. translators: %s: product name
-#: includes/class-submission.php:410
+#: includes/class-submission.php:481
 #, php-format
 msgid "“%s” is not eligible for withdrawal."
+msgstr ""
+
+#: includes/class-admin.php:691
+msgid "“Prepare refund” fills in the WooCommerce refund form of this order; check the amount and confirm it. The plugin never refunds or restocks by itself."
 msgstr ""
 
 #: includes/class-settings.php:363

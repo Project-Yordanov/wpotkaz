@@ -45,6 +45,7 @@ class Admin_List_Table extends \WP_List_Table {
 			'search'       => $get( 's' ),
 			'deadline'     => $get( 'deadline' ),
 			'email_status' => $get( 'email_status' ),
+			'refund'       => $get( 'refund' ),
 			'date_from'    => $get( 'date_from' ),
 			'date_to'      => $get( 'date_to' ),
 			'orderby'      => $get( 'orderby' ) ? $get( 'orderby' ) : 'created_gmt',
@@ -67,6 +68,7 @@ class Admin_List_Table extends \WP_List_Table {
 			'customer' => __( 'Customer', 'otkazpro' ),
 			'items'    => __( 'Products', 'otkazpro' ),
 			'deadline' => __( 'Deadline', 'otkazpro' ),
+			'refund'   => __( 'Refund', 'otkazpro' ),
 			'email'    => __( 'Confirmation', 'otkazpro' ),
 		);
 	}
@@ -140,6 +142,13 @@ class Admin_List_Table extends \WP_List_Table {
 				<option value="sent" <?php selected( $f['email_status'], 'sent' ); ?>><?php esc_html_e( 'Sent', 'otkazpro' ); ?></option>
 				<option value="failed" <?php selected( $f['email_status'], 'failed' ); ?>><?php esc_html_e( 'Email not sent', 'otkazpro' ); ?></option>
 			</select>
+			<label class="screen-reader-text" for="otkazpro-refund"><?php esc_html_e( 'Refund', 'otkazpro' ); ?></label>
+			<select name="refund" id="otkazpro-refund">
+				<option value=""><?php esc_html_e( 'Any refund status', 'otkazpro' ); ?></option>
+				<option value="open" <?php selected( $f['refund'], 'open' ); ?>><?php esc_html_e( 'Not processed', 'otkazpro' ); ?></option>
+				<option value="overdue" <?php selected( $f['refund'], 'overdue' ); ?>><?php esc_html_e( 'Overdue', 'otkazpro' ); ?></option>
+				<option value="processed" <?php selected( $f['refund'], 'processed' ); ?>><?php esc_html_e( 'Processed', 'otkazpro' ); ?></option>
+			</select>
 			<label for="otkazpro-from"><?php esc_html_e( 'From', 'otkazpro' ); ?></label>
 			<input type="date" id="otkazpro-from" name="date_from" value="<?php echo esc_attr( $f['date_from'] ); ?>" />
 			<label for="otkazpro-to"><?php esc_html_e( 'To', 'otkazpro' ); ?></label>
@@ -155,6 +164,7 @@ class Admin_List_Table extends \WP_List_Table {
 								's'            => $f['search'],
 								'deadline'     => $f['deadline'],
 								'email_status' => $f['email_status'],
+								'refund'       => $f['refund'],
 								'date_from'    => $f['date_from'],
 								'date_to'      => $f['date_to'],
 							)
@@ -236,6 +246,16 @@ class Admin_List_Table extends \WP_List_Table {
 	 */
 	protected function column_deadline( $s ) {
 		return Admin::deadline_badge( $s );
+	}
+
+	/**
+	 * Refund column.
+	 *
+	 * @param Submission $s Item.
+	 * @return string
+	 */
+	protected function column_refund( $s ) {
+		return Refunds::badge( $s ) . '<br />' . ( $s->processed_gmt ? '' : Refunds::prepare_button( $s ) . ' ' ) . Refunds::processed_button( $s );
 	}
 
 	/**

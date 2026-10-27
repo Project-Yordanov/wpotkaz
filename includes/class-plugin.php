@@ -56,6 +56,7 @@ final class Plugin {
 		Exclusions::init();
 		Form::init();
 		Emails::init();
+		Refunds::init();
 		Account::init();
 		Privacy::init();
 		Cache_Check::init();

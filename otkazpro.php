@@ -3,7 +3,7 @@
  * Plugin Name:       OtkazPro – Withdrawal Button for WooCommerce
  * Plugin URI:        https://github.com/Project-Yordanov/otkazpro
  * Description:       Adds the online withdrawal function required by EU Directive 2023/2673 (Bulgaria: Art. 52a of the Consumer Protection Act) to WooCommerce: a “Withdraw from the contract here” button, a two-step form, partial withdrawal, an instant confirmation email and a register of statements.
- * Version:           2.0.0
+ * Version:           2.1.0
  * Requires at least: 6.4
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
@@ -51,7 +51,7 @@ if ( defined( 'PY_OTKAZ_VERSION' ) ) {
 	return;
 }
 
-define( 'PY_OTKAZ_VERSION', '2.0.0' );
+define( 'PY_OTKAZ_VERSION', '2.1.0' );
 define( 'PY_OTKAZ_FILE', __FILE__ );
 define( 'PY_OTKAZ_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PY_OTKAZ_URL', plugin_dir_url( __FILE__ ) );
